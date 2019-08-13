@@ -8,10 +8,8 @@ public class PlannerAgent extends Agent {
 	
 	protected void setup() {
 		this.askRoute();
-		addBehaviour(new CyclicBehaviour(this) 
-        {
-			 public void action() 
-             {	
+		addBehaviour(new CyclicBehaviour(this) {
+			 public void action() {	
 				
 			 	Trip trip1 = new Trip(1,1,15);
 				Trip trip2 = new Trip(4,1,20);
@@ -22,8 +20,8 @@ public class PlannerAgent extends Agent {
                 ACLMessage msg = receive();
                 if (msg!=null) {
                     System.out.println( " - " +
-                       myAgent.getLocalName() + " <- " +
-                       msg.getContent() + " from " + msg.getSender());
+                    					myAgent.getLocalName() + " <- " +
+                    					msg.getContent() + " from " + msg.getSender().getName());
                     
                     if(msg.getContent().equals("Reservar viaje")) {
                     	bookSeat(1,trips2);	
@@ -32,10 +30,8 @@ public class PlannerAgent extends Agent {
                     if(msg.getSender().getLocalName().equals("router") ) {
                     	setRoutes(1, trips2, msg.getContent());	
                     }
-                    
                     // block();
                  }
-                
              }
         });
 		

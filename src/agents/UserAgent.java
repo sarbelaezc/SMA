@@ -15,7 +15,7 @@ public class UserAgent extends Agent {
                 if (msg!=null) {
                     System.out.println( " - " +
                        myAgent.getLocalName() + " <- " +
-                       msg.getContent() + " from " + msg.getSender());
+                       msg.getContent() + " from " + msg.getSender().getName());
 
                     block();
                     	

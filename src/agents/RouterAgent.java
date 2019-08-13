@@ -14,7 +14,7 @@ public class RouterAgent extends Agent {
                 if (msg!=null) {
                     System.out.println( " - " +
                        myAgent.getLocalName() + " <- " +
-                       msg.getContent() + " from " + msg.getSender());
+                       msg.getContent() + " from " + msg.getSender().getName());
                     
                     if(msg.getContent().equals("Pedir ruta")) {
                     	assignRoute();
