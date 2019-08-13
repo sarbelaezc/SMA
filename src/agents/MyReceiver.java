@@ -3,6 +3,7 @@ import jade.core.Agent;
 import jade.core.behaviours.*;
 import jade.lang.acl.*;
 
+@SuppressWarnings("serial")
 public class MyReceiver extends SimpleBehaviour
 {
 	

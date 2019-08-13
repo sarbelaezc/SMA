@@ -3,13 +3,12 @@ import jade.core.*;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
+@SuppressWarnings("serial")
 public class RouterAgent extends Agent {
 	public int id;
 	protected void setup() {
-		addBehaviour(new CyclicBehaviour(this) 
-        {
-			 public void action() 
-             {
+		addBehaviour(new CyclicBehaviour(this) {
+			 public void action() {
                 ACLMessage msg = receive();
                 if (msg!=null) {
                     System.out.println( " - " +
@@ -21,10 +20,8 @@ public class RouterAgent extends Agent {
                     }
                     block();
                  }
-                
              }
         });
-		
 	}
 
 	public void assignRoute() {

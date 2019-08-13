@@ -1,7 +1,9 @@
 package agents;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Trip {
 	public int id;
 	public int route;

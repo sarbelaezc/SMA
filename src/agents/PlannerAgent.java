@@ -1,15 +1,17 @@
 package agents;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
+@SuppressWarnings("serial")
 public class PlannerAgent extends Agent {
 	
 	protected void setup() {
 		this.askRoute();
 		addBehaviour(new CyclicBehaviour(this) {
-			 public void action() {	
+			 @SuppressWarnings({ "unchecked", "rawtypes" })
+			public void action() {	
 				
 			 	Trip trip1 = new Trip(1,1,15);
 				Trip trip2 = new Trip(4,1,20);
@@ -33,10 +35,10 @@ public class PlannerAgent extends Agent {
                     // block();
                  }
              }
-        });
-		
+        });	
     }
 	
+	@SuppressWarnings("unused")
 	public boolean bookSeat(int tripId, ArrayList<Trip> trips) {
 		for(int i = 0; i <= trips.size(); i++) {
 			Trip trip = trips.get(i);
@@ -47,17 +49,15 @@ public class PlannerAgent extends Agent {
 			    msg.setContent("Reserva completa" );
 			    send(msg);	
 				return true;
-			}
-			else {
+			} else {
 				ACLMessage msg = new ACLMessage( ACLMessage.INFORM );
 				msg.addReceiver( new AID( "user", AID.ISLOCALNAME ) );
 			    msg.setContent("Viaje lleno" );
 			    send(msg);	
 				return false;
-				}
+			}
 		}
 		return false;
-		
 	}
 	
 	public void askRoute(){
@@ -70,9 +70,5 @@ public class PlannerAgent extends Agent {
 	public ArrayList<Trip> setRoutes(int tripId, ArrayList<Trip> trips, String routeId) {
 		return trips;
 	}
-
-	
-	
-	
 }
 
