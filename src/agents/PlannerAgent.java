@@ -127,7 +127,7 @@ public class PlannerAgent extends Agent {
 						DFAgentDescription[] result = DFService.search(this, template);
 						for (int j = 0; j < result.length; j++) {
 							if (result[j].getName() != sender) {
-								msg.addReceiver(result[i].getName());
+								msg.addReceiver(result[j].getName());
 							}
 						}
 						try {
