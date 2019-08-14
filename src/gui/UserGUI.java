@@ -160,6 +160,7 @@ public class UserGUI extends JFrame {
 		area0.setLineWrap(true);
 		area0.setWrapStyleWord(true);
 		area0.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+		area0.setEditable(false);
 		JScrollPane scparea0 = new JScrollPane(area0);
 		scparea0.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		gbcpanel0.gridx = 1;
