@@ -14,9 +14,27 @@ public class RouterAgent extends Agent {
 	public ArrayList<Trip> routes;
 
 	protected void setup() {
+<<<<<<< HEAD
 		this.routes.add(new Trip());
 		addBehaviour(new ListeningBehaviour(this));
 
+=======
+		addBehaviour(new CyclicBehaviour(this) {
+			 public void action() {
+                ACLMessage msg = receive();
+                if (msg!=null) {
+                    System.out.println( " - " +
+                       myAgent.getLocalName() + " <- " +
+                       msg.getContent() + " from " + msg.getSender().getName());
+                    
+                    if(msg.getContent().equals("Pedir ruta")) {
+                    	assignRoute();
+                    }
+                    block();
+                 }
+             }
+        });
+>>>>>>> c17b6e0fb5137b3311d872892faf7504e34c1fc4
 	}
 
 	public void assignRoute() {
