@@ -10,6 +10,7 @@ import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 import ontology.*;
 import gui.UserGUI;
@@ -19,16 +20,19 @@ public class UserAgent extends Agent {
 
 	private Codec codec = new SLCodec();
 	private Ontology ontology = TripOntology.getInstance();
-	private List trips;
+	private List trips = new ArrayList();
 	UserGUI userGUI;
 	
 	protected void setup() {
 		getContentManager().registerLanguage(codec);
 		getContentManager().registerOntology(ontology);
-
-		userGUI = new UserGUI();
-		userGUI.setAgent(this);
-		userGUI.setVisible(true);
+		
+		Trip trip1 = new Trip("9:00 am", 50, 1);
+		Trip trip2 = new Trip("10:00 am", 50, 2);
+		Trip trip3 = new Trip("11:00 am", 50, 3);
+		trips.add(trip1);
+		trips.add(trip2);
+		trips.add(trip3);
 		
 		// this.bookTrip();
 
@@ -60,11 +64,19 @@ public class UserAgent extends Agent {
 				
 			}
 		});
+		userGUI = new UserGUI(this);
+		userGUI.setAgent(this);
+		userGUI.setVisible(true);
 	}
 	
 	public void setTrips(List trips) {
 		this.trips = trips;
 	}
+	
+	public List getTrips() {
+		return this.trips;
+	}
+
 	public void bookTrip(Trip choosedTrip) {
 		System.out.println("Reservando viaje");
 		Reserve reserve = new Reserve();

@@ -12,9 +12,12 @@ import javax.swing.JMenuItem;
 import agents.UserAgent;
 import gui.oyentes.OyenteBoton;
 import gui.oyentes.OyenteMenu;
+import jade.util.leap.List;
+import ontology.Trip;
 import agents.UserAgent;
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -38,9 +41,8 @@ public class UserGUI extends JFrame {
 	JPanel panel1;
 	JLabel image;
 
-	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
-	public UserGUI() {
-
+	@SuppressWarnings({ "rawtypes", "unchecked", "null" })
+	public UserGUI(UserAgent userAgent) {
 		super("Agente Usuario");
 		
 		// Barra de Menu
@@ -79,7 +81,15 @@ public class UserGUI extends JFrame {
 		panel0.setLayout(gbpanel0);
 		panel0.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
 
-		String[] datacombo0 = {"Chocolate","Ice Cream","Apple Pie"};
+		String[] datacombo0 = new String[5];
+		Trip trip;
+		for(int i=0; i < userAgent.getTrips().size(); i++) {
+			trip = (Trip) userAgent.getTrips().get(i);
+			System.out.print(trip.getDepartureTime());
+			datacombo0[i] = trip.getDepartureTime();
+		}
+		
+		//String[] datacombo0 = {"Chocolate","Ice Cream","Apple Pie"};
 		combo0 = new JComboBox(datacombo0);
 		gbcpanel0.gridx = 2;
 		gbcpanel0.gridy = 1;

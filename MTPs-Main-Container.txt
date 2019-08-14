@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-http://192.168.1.68:7778/acc
-=======
 http://DESKTOP-7E91JIB.mshome.net:7778/acc
->>>>>>> c17b6e0fb5137b3311d872892faf7504e34c1fc4
