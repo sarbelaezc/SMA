@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
+
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -32,10 +34,11 @@ import javax.swing.JComboBox;
 
 @SuppressWarnings({ "serial", "unused" })
 public class UserGUI extends JFrame {
-
+	
 	UserAgent userAgent;
+	
 	int selected;
-	int route;
+	private int route;
 
 	JPanel panel0;
 	JButton but0;
@@ -45,11 +48,15 @@ public class UserGUI extends JFrame {
 	JPanel panel1;
 	JLabel image;
 
-	@SuppressWarnings({ "rawtypes", "unchecked", "null" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public UserGUI(UserAgent userAgent) {
 		super("Agente Usuario");
 		
 		OyenteBoton oyente = new OyenteBoton(userAgent);
+		
+		//Aspectos básicos de la ventana
+		this.setMinimumSize(new Dimension(250,250));
+		//this.setLocationRelativeTo(null);
 		
 		// Barra de Menu
 		JMenuBar menuBar = new JMenuBar();
@@ -101,7 +108,22 @@ public class UserGUI extends JFrame {
 				selected = combo0.getSelectedIndex();
 				oyente.setSelected(selected);
 				Trip trip = (Trip) userAgent.getTrips().get(selected);
-				route = trip.getRoute();
+				setRoute(trip.getRoute()); 
+				System.out.println("./resources/Ruta" + getRoute() + ".jpg");
+				if(getRoute() != 0) {
+					ImageIcon icon = new ImageIcon("./resources/Ruta" + getRoute() + ".jpg");
+					Image resize = icon.getImage();
+					resize = resize.getScaledInstance(550, 550, java.awt.Image.SCALE_SMOOTH);
+					image.setIcon(new ImageIcon(resize));
+					image.setText("");
+					image.setToolTipText("La ruta sugerida por el sistema es la " + getRoute());
+					setSize(new Dimension(700,750));
+				}else {
+					image.setText("El viaje no tiene ruta asignada");
+					image.setIcon(new ImageIcon());
+					setSize(new Dimension(275,275));
+				}
+				
 			}
 		});
 		gbcpanel0.gridx = 2;
@@ -162,19 +184,20 @@ public class UserGUI extends JFrame {
 		gbpanel0.setConstraints(panel1, gbcpanel0);
 		panel0.add(panel1);
 		
-		if(route != 0) {
-			ImageIcon icon = new ImageIcon("./resources/Ruta" + route + ".jpg");
-			Image resize = icon.getImage();
-			resize = resize.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH);
-			image = new JLabel(new ImageIcon(resize));
-			panel1.add(image);
-		} else {
-			image = new JLabel("Seleccione un viaje");
-			panel1.add(image);
-		}
+		
+		image = new JLabel("Seleccione un viaje");
+		panel1.add(image);
+//		if(route != 0) {
+//			ImageIcon icon = new ImageIcon("./resources/Ruta" + route + ".jpg");
+//			Image resize = icon.getImage();
+//			resize = resize.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH);
+//			image.setIcon(new ImageIcon(resize));
+//			//panel1.add(image);
+//		} else {
+//			image.setText("Seleccione un viaje");
+//		}
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-
 		setContentPane(panel0);
 		pack();
 		setVisible(true);
@@ -183,5 +206,13 @@ public class UserGUI extends JFrame {
 	public void setAgent(UserAgent userAgent) {
 		// TODO Auto-generated method stub
 		this.userAgent = userAgent;
+	}
+
+	public int getRoute() {
+		return route;
+	}
+
+	public void setRoute(int route) {
+		this.route = route;
 	}
 }
