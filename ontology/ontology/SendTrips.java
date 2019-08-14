@@ -6,11 +6,11 @@ import jade.util.leap.*;
 import jade.core.*;
 
 /**
-* Protege name: ReserveCompleted
+* Protege name: SendTrips
 * @author ontology bean generator
 * @version 2019/08/14, 18:52:46
 */
-public class ReserveCompleted implements Predicate {
+public class SendTrips implements Predicate {
 
    /**
 * Protege name: trips

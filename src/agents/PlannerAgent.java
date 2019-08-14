@@ -89,11 +89,13 @@ public class PlannerAgent extends Agent {
 	public boolean bookSeat(Trip choosedTrip, AID sender, Seat seat) {
 		int tripId = choosedTrip.getId();
 		for (int i = 0; i <= trips.size(); i++) {
-			Trip trip = (Trip) trips.get(i);
+			Trip trip = (Trip) trips.remove(i);
 			if (trip.getId() == tripId && trip.getCapacity() - 1 >= 0) {
 				trip.setCapacity(trip.getCapacity() - 1);
 				trip.addSeats(seat);
+				trips.add(trip);
 				ReserveCompleted resComp = new ReserveCompleted();
+				resComp.setTrips(trips);
 				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 				msg.setLanguage(codec.getName());
 				msg.setOntology(ontology.getName());
