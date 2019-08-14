@@ -47,12 +47,12 @@ public class UserGUI extends JFrame {
 	JComboBox combo0;
 	JPanel panel1;
 	JLabel image;
+	
+	OyenteBoton oyente = new OyenteBoton(userAgent);
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public UserGUI(UserAgent userAgent) {
 		super("Agente Usuario");
-		
-		OyenteBoton oyente = new OyenteBoton(userAgent);
 		
 		//Aspectos básicos de la ventana
 		this.setMinimumSize(new Dimension(250,250));
@@ -108,8 +108,13 @@ public class UserGUI extends JFrame {
 				selected = combo0.getSelectedIndex();
 				oyente.setSelected(selected);
 				Trip trip = (Trip) userAgent.getTrips().get(selected);
-				setRoute(trip.getRoute()); 
-				System.out.println("./resources/Ruta" + getRoute() + ".jpg");
+				setRoute(trip.getRoute());
+				area0.setText(area0.getText() 
+							  + "Los cupos restantes en el viaje de las " 
+							  + trip.getDepartureTime() 
+							  + " son: " + trip.getCapacity()
+							  + "\n");
+				//System.out.println("./resources/Ruta" + getRoute() + ".jpg");
 				if(getRoute() != 0) {
 					ImageIcon icon = new ImageIcon("./resources/Ruta" + getRoute() + ".jpg");
 					Image resize = icon.getImage();
@@ -206,6 +211,7 @@ public class UserGUI extends JFrame {
 	public void setAgent(UserAgent userAgent) {
 		// TODO Auto-generated method stub
 		this.userAgent = userAgent;
+		this.oyente.setUserAgent(userAgent);
 	}
 
 	public int getRoute() {
