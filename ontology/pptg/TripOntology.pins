@@ -1,0 +1,72 @@
+; Wed Aug 14 21:06:48 GMT 2019
+; 
+;+ (version "3.2.1")
+;+ (build "Build 365")
+
+([addresses] of  %3AJADE-SLOT
+
+	(%3AJADE-UNNAMED-SLOT FALSE))
+
+([AgentAction] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE TRUE))
+
+([AID] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE TRUE))
+
+([Concept] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE TRUE))
+
+([name] of  %3AJADE-SLOT
+
+	(%3AJADE-UNNAMED-SLOT FALSE))
+
+([Predicate] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE TRUE))
+
+([RequestRoutes] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE FALSE))
+
+([RequestTrips] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE FALSE))
+
+([Reserve] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE FALSE))
+
+([ReserveCompleted] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE FALSE))
+
+([resolvers] of  %3AJADE-SLOT
+
+	(%3AJADE-UNNAMED-SLOT FALSE))
+
+([Seat] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE FALSE))
+
+([SendTrips] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE FALSE))
+
+([SimpleJADEAbstractOntology_00014] of  %3ASTANDARD-FACET
+
+	(%3AASSOCIATED-SLOT [%3AJADE-NAME]))
+
+([SimpleJADEAbstractOntology_00016] of  %3ASTANDARD-FACET
+
+	(%3AASSOCIATED-SLOT [%3AJADE-UNNAMED-SLOT]))
+
+([Trip] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE FALSE))
+
+([TripFull] of  %3AJADE-CLASS
+
+	(%3AJADE-IGNORE FALSE))
