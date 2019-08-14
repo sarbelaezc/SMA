@@ -49,7 +49,7 @@ public class UserGUI extends JFrame {
 	public UserGUI(UserAgent userAgent) {
 		super("Agente Usuario");
 		
-		OyenteBoton oyente = new OyenteBoton();
+		OyenteBoton oyente = new OyenteBoton(userAgent);
 		
 		// Barra de Menu
 		JMenuBar menuBar = new JMenuBar();
@@ -86,11 +86,10 @@ public class UserGUI extends JFrame {
 		panel0.setLayout(gbpanel0);
 		panel0.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		
-		String[] datacombo0 = new String[5];
+		String[] datacombo0 = new String[3];
 		Trip trip;
 		for (int i = 0; i < userAgent.getTrips().size(); i++) {
 			trip = (Trip) userAgent.getTrips().get(i);
-			System.out.print(trip.getDepartureTime());
 			datacombo0[i] = trip.getDepartureTime();
 		}
 		// String[] datacombo0 = {"Chocolate","Ice Cream","Apple Pie"};

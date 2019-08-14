@@ -15,7 +15,7 @@ import jade.util.leap.List;
 import ontology.*;
 import gui.UserGUI;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "unused" })
 public class UserAgent extends Agent {
 
 	private Codec codec = new SLCodec();

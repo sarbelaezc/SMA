@@ -8,7 +8,7 @@ import jade.core.*;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
-@SuppressWarnings("serial")
+@SuppressWarnings({ "serial", "unused" })
 public class RouterAgent extends Agent {
 	public int id;
 	protected void setup() {
