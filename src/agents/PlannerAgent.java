@@ -23,6 +23,12 @@ public class PlannerAgent extends Agent {
 
 	public PlannerAgent() {
 		super();
+		Trip trip1 = new Trip("9:00 am", 50, 1);
+		Trip trip2 = new Trip("10:00 am", 50, 2);
+		Trip trip3 = new Trip("11:00 am", 50, 3);
+		trips.add(trip1);
+		trips.add(trip2);
+		trips.add(trip3);
 	}
 
 	protected void setup() {

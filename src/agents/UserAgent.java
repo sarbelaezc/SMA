@@ -20,35 +20,51 @@ public class UserAgent extends Agent {
 
 	private Codec codec = new SLCodec();
 	private Ontology ontology = TripOntology.getInstance();
-	private List trips = new ArrayList();
+	private List trips = null;
 	UserGUI userGUI;
-	
+
 	protected void setup() {
 		getContentManager().registerLanguage(codec);
 		getContentManager().registerOntology(ontology);
-		
-		Trip trip1 = new Trip("9:00 am", 50, 1);
-		Trip trip2 = new Trip("10:00 am", 50, 2);
-		Trip trip3 = new Trip("11:00 am", 50, 3);
-		trips.add(trip1);
-		trips.add(trip2);
-		trips.add(trip3);
-		
+
 		this.requestTrips();
+		MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+				MessageTemplate.MatchOntology(ontology.getName()));
+		ACLMessage msg = blockingReceive(mt);
+		try {
+			if (msg != null) {
+				System.out.println(
+						" - " + getLocalName() + " <- " + msg.getContent() + " from " + msg.getSender().getName());
+				if (msg.getPerformative() == ACLMessage.NOT_UNDERSTOOD) {
+					System.out.println("Message not understood");
+				} else if (msg.getPerformative() == ACLMessage.INFORM) {
+					ContentElement ce = getContentManager().extractContent(msg);
+					if (ce instanceof SendTrips) {
+						SendTrips st = (SendTrips) ce;
+						setTrips(st.getTrips());
+					}
+				}
+			}
+		} catch (jade.content.lang.Codec.CodecException ce) {
+			System.out.println(ce);
+		} catch (jade.content.onto.OntologyException oe) {
+			System.out.println(oe);
+		}
 
 		addBehaviour(new CyclicBehaviour(this) {
 			public void action() {
-				MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()), MessageTemplate.MatchOntology(ontology.getName()));
+				MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+						MessageTemplate.MatchOntology(ontology.getName()));
 				ACLMessage msg = blockingReceive(mt);
 				try {
 					if (msg != null) {
 						System.out.println(" - " + myAgent.getLocalName() + " <- " + msg.getContent() + " from "
 								+ msg.getSender().getName());
-						if(msg.getPerformative()==ACLMessage.NOT_UNDERSTOOD) {
+						if (msg.getPerformative() == ACLMessage.NOT_UNDERSTOOD) {
 							System.out.println("Message not understood");
-						}else if(msg.getPerformative()==ACLMessage.INFORM) {
+						} else if (msg.getPerformative() == ACLMessage.INFORM) {
 							ContentElement ce = getContentManager().extractContent(msg);
-							if(ce instanceof SendTrips) {
+							if (ce instanceof SendTrips) {
 								SendTrips st = (SendTrips) ce;
 								setTrips(st.getTrips());
 							}
@@ -56,23 +72,29 @@ public class UserAgent extends Agent {
 
 						block();
 					}
-				}catch(jade.content.lang.Codec.CodecException ce) {
+				} catch (jade.content.lang.Codec.CodecException ce) {
 					System.out.println(ce);
-				}catch(jade.content.onto.OntologyException oe) {
+				} catch (jade.content.onto.OntologyException oe) {
 					System.out.println(oe);
 				}
-				
+
 			}
 		});
-		userGUI = new UserGUI(this);
-		userGUI.setAgent(this);
-		userGUI.setVisible(true);
+		while (true) {
+			if (trips != null) {
+				userGUI = new UserGUI(this);
+				userGUI.setAgent(this);
+				userGUI.setVisible(true);
+				break;
+			}
+		}
+
 	}
-	
+
 	public void setTrips(List trips) {
 		this.trips = trips;
 	}
-	
+
 	public List getTrips() {
 		return this.trips;
 	}
@@ -96,10 +118,12 @@ public class UserAgent extends Agent {
 		}
 		send(msg);
 	}
-	
+
 	public void requestTrips() {
 		RequestTrips rt = new RequestTrips();
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setLanguage(codec.getName());
+		msg.setOntology(ontology.getName());
 		msg.setSender(getAID());
 		msg.addReceiver(new AID("planner", AID.ISLOCALNAME));
 		try {
