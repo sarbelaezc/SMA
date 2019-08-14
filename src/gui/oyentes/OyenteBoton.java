@@ -46,4 +46,12 @@ public class OyenteBoton implements ActionListener {
 		this.selected = selected;
 	}
 
+	public UserAgent getUserAgent() {
+		return userAgent;
+	}
+
+	public void setUserAgent(UserAgent userAgent) {
+		this.userAgent = userAgent;
+	}
+	
 }
