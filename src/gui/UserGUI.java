@@ -22,6 +22,8 @@ import javax.swing.ImageIcon;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JTextArea;
@@ -30,9 +32,10 @@ import javax.swing.JComboBox;
 
 @SuppressWarnings({ "serial", "unused" })
 public class UserGUI extends JFrame {
-	
+
 	UserAgent userAgent;
-	
+	int selected;
+
 	JPanel panel0;
 	JButton but0;
 	JTextArea area0;
@@ -45,52 +48,61 @@ public class UserGUI extends JFrame {
 	public UserGUI(UserAgent userAgent) {
 		super("Agente Usuario");
 		
+		OyenteBoton oyente = new OyenteBoton();
+		
 		// Barra de Menu
-        JMenuBar menuBar = new JMenuBar();
-        this.setJMenuBar(menuBar);
+		JMenuBar menuBar = new JMenuBar();
+		this.setJMenuBar(menuBar);
 
-        JMenu archivo = new JMenu("Archivo");
-        JMenu ayuda = new JMenu("Ayuda");
+		JMenu archivo = new JMenu("Archivo");
+		JMenu ayuda = new JMenu("Ayuda");
 
-        JMenuItem salir = new JMenuItem("Salir");
-        JMenuItem ver_ayuda = new JMenuItem("Ver ayuda");
-        JMenuItem info = new JMenuItem("Acerca de nosotros");
+		JMenuItem salir = new JMenuItem("Salir");
+		JMenuItem ver_ayuda = new JMenuItem("Ver ayuda");
+		JMenuItem info = new JMenuItem("Acerca de nosotros");
 
-        salir.setActionCommand("Salir");
-        salir.addActionListener(new OyenteMenu());
+		salir.setActionCommand("Salir");
+		salir.addActionListener(new OyenteMenu());
 
-        ver_ayuda.setActionCommand("Ayuda");
-        ver_ayuda.addActionListener(new OyenteMenu());
+		ver_ayuda.setActionCommand("Ayuda");
+		ver_ayuda.addActionListener(new OyenteMenu());
 
-        info.setActionCommand("Info");
-        info.addActionListener(new OyenteMenu());
+		info.setActionCommand("Info");
+		info.addActionListener(new OyenteMenu());
 
-        menuBar.add(archivo);
-        menuBar.add(ayuda);
+		menuBar.add(archivo);
+		menuBar.add(ayuda);
 
-        archivo.add(salir);
+		archivo.add(salir);
 
-        ayuda.add(ver_ayuda);
-        ayuda.add(info);
+		ayuda.add(ver_ayuda);
+		ayuda.add(info);
 
-        
-        //Implementación de la GUI
+		// Implementación de la GUI
 		panel0 = new JPanel();
 		GridBagLayout gbpanel0 = new GridBagLayout();
 		GridBagConstraints gbcpanel0 = new GridBagConstraints();
 		panel0.setLayout(gbpanel0);
-		panel0.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+		panel0.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
 		String[] datacombo0 = new String[5];
 		Trip trip;
-		for(int i=0; i < userAgent.getTrips().size(); i++) {
+		for (int i = 0; i < userAgent.getTrips().size(); i++) {
 			trip = (Trip) userAgent.getTrips().get(i);
 			System.out.print(trip.getDepartureTime());
 			datacombo0[i] = trip.getDepartureTime();
 		}
-		
-		//String[] datacombo0 = {"Chocolate","Ice Cream","Apple Pie"};
+		// String[] datacombo0 = {"Chocolate","Ice Cream","Apple Pie"};
 		combo0 = new JComboBox(datacombo0);
+		combo0.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				selected = combo0.getSelectedIndex();
+				System.out.println(selected); 
+				oyente.setSelected(selected);
+			}
+		});
 		gbcpanel0.gridx = 2;
 		gbcpanel0.gridy = 1;
 		gbcpanel0.gridwidth = 15;
@@ -101,15 +113,15 @@ public class UserGUI extends JFrame {
 		gbcpanel0.anchor = GridBagConstraints.NORTH;
 		gbpanel0.setConstraints(combo0, gbcpanel0);
 		panel0.add(combo0);
-		
+
 		but0 = new JButton("Solicitar un cupo");
 		but0.setActionCommand("Reservar viaje");
-		but0.addActionListener(new OyenteBoton(combo0.getSelectedIndex()));
+		but0.addActionListener(oyente);
 		gbcpanel0.gridx = 18;
 		gbcpanel0.gridy = 1;
 		gbcpanel0.gridwidth = 1;
 		gbcpanel0.gridheight = 2;
-		//gbcpanel0.fill = GridBagConstraints.BOTH;
+		// gbcpanel0.fill = GridBagConstraints.BOTH;
 		gbcpanel0.weightx = 1;
 		gbcpanel0.weighty = 0;
 		gbcpanel0.anchor = GridBagConstraints.NORTH;
@@ -119,7 +131,7 @@ public class UserGUI extends JFrame {
 		area0 = new JTextArea(4, 10);
 		area0.setLineWrap(true);
 		area0.setWrapStyleWord(true);
-		area0.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+		area0.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		JScrollPane scparea0 = new JScrollPane(area0);
 		scparea0.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		gbcpanel0.gridx = 1;
@@ -136,7 +148,7 @@ public class UserGUI extends JFrame {
 		panel1 = new JPanel();
 		GridBagLayout gbpanel1 = new GridBagLayout();
 		GridBagConstraints gbcpanel1 = new GridBagConstraints();
-		panel1.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+		panel1.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		panel1.setLayout(gbpanel1);
 		gbcpanel0.gridx = 1;
 		gbcpanel0.gridy = 4;
@@ -148,7 +160,7 @@ public class UserGUI extends JFrame {
 		gbcpanel0.anchor = GridBagConstraints.CENTER;
 		gbpanel0.setConstraints(panel1, gbcpanel0);
 		panel0.add(panel1);
-		
+
 		ImageIcon icon = new ImageIcon("./resources/Ruta1.jpg");
 		Image resize = icon.getImage();
 		resize = resize.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH);
