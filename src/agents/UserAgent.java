@@ -1,43 +1,82 @@
 package agents;
 
+import jade.content.ContentElement;
+import jade.content.lang.Codec;
+import jade.content.lang.Codec.CodecException;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
+import jade.content.onto.OntologyException;
 import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
-
+import jade.lang.acl.MessageTemplate;
+import jade.util.leap.List;
+import ontology.*;
 import gui.UserGUI;
 
 @SuppressWarnings("serial")
 public class UserAgent extends Agent {
-	
-	
+
+	private Codec codec = new SLCodec();
+	private Ontology ontology = TripOntology.getInstance();
+	private List trips;
 	
 	protected void setup() {
-		
+
 		UserGUI userGUI = new UserGUI();
 		userGUI.setAgent(this);
 		userGUI.setVisible(true);
 		
-		//this.bookTrip();
-		
-		addBehaviour(new CyclicBehaviour(this) {
-			 public void action() {
-                ACLMessage msg = receive();
-                if (msg!=null) {
-                    System.out.println( " - " +
-                       myAgent.getLocalName() + " <- " +
-                       msg.getContent() + " from " + msg.getSender().getName());
+		// this.bookTrip();
 
-                    block();                    	
-                 }
-             }
-        });
+		addBehaviour(new CyclicBehaviour(this) {
+			public void action() {
+				MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()), MessageTemplate.MatchOntology(ontology.getName()));
+				ACLMessage msg = blockingReceive(mt);
+				try {
+					if (msg != null) {
+						System.out.println(" - " + myAgent.getLocalName() + " <- " + msg.getContent() + " from "
+								+ msg.getSender().getName());
+						if(msg.getPerformative()==ACLMessage.NOT_UNDERSTOOD) {
+							System.out.println("Message not understood");
+						}else if(msg.getPerformative()==ACLMessage.INFORM) {
+							ContentElement ce = getContentManager().extractContent(msg);
+							if(ce instanceof SendTrips) {
+								SendTrips st = (SendTrips) ce;
+								setTrips(st.getTrips());
+							}
+						}
+
+						block();
+					}
+				}catch(jade.content.lang.Codec.CodecException ce) {
+					System.out.println(ce);
+				}catch(jade.content.onto.OntologyException oe) {
+					System.out.println(oe);
+				}
+				
+			}
+		});
 	}
 	
-	public void bookTrip() {
-		System.out.println( "Reservando viaje");
-		ACLMessage msg = new ACLMessage( ACLMessage.INFORM );
-		msg.addReceiver( new AID( "planner", AID.ISLOCALNAME ) );
-	    msg.setContent("Reservar viaje" );
-	    send(msg);	
+	public void setTrips(List trips) {
+		this.trips = trips;
+	}
+	public void bookTrip(Trip choosedTrip, Seat seat) {
+		System.out.println("Reservando viaje");
+		Reserve reserve = new Reserve();
+		reserve.setChoosedTrip(choosedTrip);
+		reserve.setSeat(seat);
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setLanguage(codec.getName());
+		msg.setOntology(ontology.getName());
+		msg.setSender(getAID());
+		msg.addReceiver(new AID("planner", AID.ISLOCALNAME));
+		try {
+			getContentManager().fillContent(msg, reserve);
+		} catch (CodecException | OntologyException e) {
+			System.out.println(e);
+		}
+		send(msg);
 	}
 }

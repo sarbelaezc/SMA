@@ -2,7 +2,6 @@ package agents;
 import java.util.ArrayList;
 import ontology.*;
 
-import java.util.ArrayList;
 import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
