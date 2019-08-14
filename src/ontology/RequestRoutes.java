@@ -10,6 +10,7 @@ import jade.core.*;
 * @author ontology bean generator
 * @version 2019/08/14, 07:26:48
 */
+@SuppressWarnings({ "serial", "unused" })
 public class RequestRoutes implements Predicate {
 
    /**
