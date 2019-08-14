@@ -1,19 +1,22 @@
 package agents;
 import java.util.ArrayList;
+import ontology.*;
 
 import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
+
+@SuppressWarnings("serial")
 public class PlannerAgent extends Agent {
-	
+	public ArrayList<Trip> routes;
 	protected void setup() {
-		this.askRoute();
+		askRoute();
 		addBehaviour(new CyclicBehaviour(this) {
+			
 			 public void action() {	
-				
-			 	Trip trip1 = new Trip(1,1,15);
-				Trip trip2 = new Trip(4,1,20);
-				ArrayList<Trip> trips2 = new ArrayList();
+			 	Trip trip1 = new Trip();
+				Trip trip2 = new Trip();
+				ArrayList<Trip> trips2 = new ArrayList<Trip>();
 				trips2.add(trip1);
 				trips2.add(trip2);
 				
@@ -37,11 +40,12 @@ public class PlannerAgent extends Agent {
 		
     }
 	
+	@SuppressWarnings("unused")
 	public boolean bookSeat(int tripId, ArrayList<Trip> trips) {
 		for(int i = 0; i <= trips.size(); i++) {
 			Trip trip = trips.get(i);
-			if(trip.id == tripId && trip.capacity -1 >= 0) {
-				trip.capacity = trip.capacity - 1;
+			if(trip.getId() == tripId && trip.getCapacity() -1 >= 0) {
+				trip.setCapacity(trip.getCapacity() - 1);
 				ACLMessage msg = new ACLMessage( ACLMessage.INFORM );
 				msg.addReceiver( new AID( "user", AID.ISLOCALNAME ) );
 			    msg.setContent("Reserva completa" );
@@ -71,8 +75,5 @@ public class PlannerAgent extends Agent {
 		return trips;
 	}
 
-	
-	
-	
 }
 

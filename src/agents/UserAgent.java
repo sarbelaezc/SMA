@@ -2,11 +2,12 @@ package agents;
 import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
+@SuppressWarnings("serial")
 public class UserAgent extends Agent {
 	
+	
+	
 	protected void setup() {
-		this.bookTrip();
-		
 		addBehaviour(new CyclicBehaviour(this) 
         {
 			 public void action() 

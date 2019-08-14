@@ -1,1 +1,8 @@
 /agents/
+/behaviors/
+/Reserve.class
+/Seat.class
+/SendTrips.class
+/Trip.class
+/TripOntology.class
+/ontology/
