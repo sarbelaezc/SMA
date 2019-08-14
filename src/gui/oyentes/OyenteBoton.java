@@ -23,7 +23,6 @@ public class OyenteBoton implements ActionListener {
 		String actionCommand = e.getActionCommand();
 		if(e.getSource() instanceof JButton) {
 			if("Reservar viaje".equals(actionCommand)) {
-				System.out.println("Holi");
 				System.out.println(this.getSelected());
 			}
 		}

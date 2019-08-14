@@ -35,6 +35,7 @@ public class UserGUI extends JFrame {
 
 	UserAgent userAgent;
 	int selected;
+	int route;
 
 	JPanel panel0;
 	JButton but0;
@@ -84,7 +85,7 @@ public class UserGUI extends JFrame {
 		GridBagConstraints gbcpanel0 = new GridBagConstraints();
 		panel0.setLayout(gbpanel0);
 		panel0.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
+		
 		String[] datacombo0 = new String[5];
 		Trip trip;
 		for (int i = 0; i < userAgent.getTrips().size(); i++) {
@@ -99,8 +100,9 @@ public class UserGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				selected = combo0.getSelectedIndex();
-				System.out.println(selected); 
 				oyente.setSelected(selected);
+				Trip trip = (Trip) userAgent.getTrips().get(selected);
+				route = trip.getRoute();
 			}
 		});
 		gbcpanel0.gridx = 2;
@@ -160,12 +162,17 @@ public class UserGUI extends JFrame {
 		gbcpanel0.anchor = GridBagConstraints.CENTER;
 		gbpanel0.setConstraints(panel1, gbcpanel0);
 		panel0.add(panel1);
-
-		ImageIcon icon = new ImageIcon("./resources/Ruta1.jpg");
-		Image resize = icon.getImage();
-		resize = resize.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH);
-		image = new JLabel(new ImageIcon(resize));
-		panel1.add(image);
+		
+		if(route != 0) {
+			ImageIcon icon = new ImageIcon("./resources/Ruta" + route + ".jpg");
+			Image resize = icon.getImage();
+			resize = resize.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH);
+			image = new JLabel(new ImageIcon(resize));
+			panel1.add(image);
+		} else {
+			image = new JLabel("Seleccione un viaje");
+			panel1.add(image);
+		}
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
