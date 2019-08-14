@@ -27,10 +27,12 @@ public class UserAgent extends Agent {
 		getContentManager().registerLanguage(codec);
 		getContentManager().registerOntology(ontology);
 		
-		
-		userGUI = new UserGUI();
-		userGUI.setAgent(this);
-		userGUI.setVisible(true);
+		Trip trip1 = new Trip("9:00 am", 50, 1);
+		Trip trip2 = new Trip("10:00 am", 50, 2);
+		Trip trip3 = new Trip("11:00 am", 50, 3);
+		trips.add(trip1);
+		trips.add(trip2);
+		trips.add(trip3);
 		
 		this.requestTrips();
 
@@ -62,12 +64,19 @@ public class UserAgent extends Agent {
 				
 			}
 		});
+		userGUI = new UserGUI(this);
+		userGUI.setAgent(this);
+		userGUI.setVisible(true);
 	}
 	
 	public void setTrips(List trips) {
 		this.trips = trips;
 	}
 	
+	public List getTrips() {
+		return this.trips;
+	}
+
 	public void bookTrip(Trip choosedTrip) {
 		System.out.println("Reservando viaje");
 		Reserve reserve = new Reserve();

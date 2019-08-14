@@ -11,7 +11,6 @@ import jade.lang.acl.ACLMessage;
 @SuppressWarnings("serial")
 public class RouterAgent extends Agent {
 	public int id;
-	
 	protected void setup() {
 		addBehaviour(new ListeningBehaviour(this));
 	}
