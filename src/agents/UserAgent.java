@@ -13,6 +13,9 @@ import jade.lang.acl.MessageTemplate;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 import ontology.*;
+
+import javax.swing.JOptionPane;
+
 import gui.UserGUI;
 
 @SuppressWarnings({ "serial", "unused" })
@@ -67,6 +70,10 @@ public class UserAgent extends Agent {
 							if (ce instanceof SendTrips) {
 								SendTrips st = (SendTrips) ce;
 								setTrips(st.getTrips());
+							}else if(ce instanceof ReserveCompleted) {
+								JOptionPane.showMessageDialog(null, "Se reservo el cupo exitosamente.", "Reserva de cupo", JOptionPane.INFORMATION_MESSAGE);
+							}else if (ce instanceof TripFull) {
+								JOptionPane.showMessageDialog(null, "El viaje está lleno!", "¡Ups!", JOptionPane.ERROR_MESSAGE);
 							}
 						}
 

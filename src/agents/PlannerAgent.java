@@ -25,10 +25,11 @@ public class PlannerAgent extends Agent {
 		super();
 		Trip trip1 = new Trip("9:00 am", 50, 1);
 		Trip trip2 = new Trip("10:00 am", 50, 2);
-		Trip trip3 = new Trip("11:00 am", 50, 3);
+		Trip trip3 = new Trip("11:00 am", 0, 3);
 		trips.add(trip1);
 		trips.add(trip2);
 		trips.add(trip3);
+		askRoute();
 	}
 
 	protected void setup() {
@@ -115,13 +116,12 @@ public class PlannerAgent extends Agent {
 	}
 
 	public void askRoute() {
-		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		RequestRoutes rr = new RequestRoutes();
+		rr.setTrips(trips);
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(getAID());
 		msg.addReceiver(new AID("router", AID.ISLOCALNAME));
 		msg.setContent("Pedir ruta");
 		send(msg);
-	}
-
-	public ArrayList setRoutes(int tripId, List trips2, String routeId) {
-		return (ArrayList) trips2;
 	}
 }
