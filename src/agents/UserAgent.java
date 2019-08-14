@@ -20,10 +20,13 @@ public class UserAgent extends Agent {
 	private Codec codec = new SLCodec();
 	private Ontology ontology = TripOntology.getInstance();
 	private List trips;
+	UserGUI userGUI;
 	
 	protected void setup() {
+		getContentManager().registerLanguage(codec);
+		getContentManager().registerOntology(ontology);
 
-		UserGUI userGUI = new UserGUI();
+		userGUI = new UserGUI();
 		userGUI.setAgent(this);
 		userGUI.setVisible(true);
 		
