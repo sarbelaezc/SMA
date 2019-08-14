@@ -27,6 +27,14 @@ public class UserAgent extends Agent {
 	UserGUI userGUI;
 
 	protected void setup() {
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		getContentManager().registerLanguage(codec);
 		getContentManager().registerOntology(ontology);
 
