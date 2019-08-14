@@ -85,45 +85,44 @@ public class PlannerAgent extends Agent {
 		askRoute();
 	}
 
-	@SuppressWarnings("unused")
 	public boolean bookSeat(Trip choosedTrip, AID sender, Seat seat) {
 		int tripId = choosedTrip.getId();
-		for (int i = 0; i <= trips.size(); i++) {
-			Trip trip = (Trip) trips.remove(i);
-			if (trip.getId() == tripId && trip.getCapacity() - 1 >= 0) {
-				trip.setCapacity(trip.getCapacity() - 1);
-				trip.addSeats(seat);
-				trips.add(trip);
-				ReserveCompleted resComp = new ReserveCompleted();
-				resComp.setTrips(trips);
-				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-				msg.setLanguage(codec.getName());
-				msg.setOntology(ontology.getName());
-				msg.setSender(getAID());
-				msg.addReceiver(sender);
-				try {
-					getContentManager().fillContent(msg, resComp);
-				}catch (CodecException | OntologyException e) {
-					System.out.println(e);
+		for (int i = 0; i < trips.size(); i++) {
+			Trip trip = (Trip) trips.get(i);
+			if (trip.getId() == tripId ) {
+				if(trip.getCapacity()-1>=0) {
+					trip.setCapacity(trip.getCapacity() - 1);
+					trip.addSeats(seat);
+					ReserveCompleted resComp = new ReserveCompleted();
+					resComp.setTrips(trips);
+					System.out.print(resComp.getTrips().toString());
+					ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+					msg.setLanguage(codec.getName());
+					msg.setOntology(ontology.getName());
+					msg.setSender(getAID());
+					msg.addReceiver(sender);
+					try {
+						getContentManager().fillContent(msg, resComp);
+					}catch (CodecException | OntologyException e) {
+						System.out.println(e);
+					}
+					send(msg);
+					return true;
 				}
-				send(msg);
-				return true;
-			} else {
-				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-				msg.setLanguage(codec.getName());
-				msg.setOntology(ontology.getName());
-				msg.setSender(getAID());
-				msg.addReceiver(sender);
-				TripFull tf = new TripFull();
-				try {
-					getContentManager().fillContent(msg, tf);
-				} catch (CodecException | OntologyException e) {
-					System.out.println(e);
-				}
-				send(msg);
-				return false;
-			}
+			} 
 		}
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.setLanguage(codec.getName());
+		msg.setOntology(ontology.getName());
+		msg.setSender(getAID());
+		msg.addReceiver(sender);
+		TripFull tf = new TripFull();
+		try {
+			getContentManager().fillContent(msg, tf);
+		} catch (CodecException | OntologyException e) {
+			System.out.println(e);
+		}
+		send(msg);
 		return false;
 	}
 

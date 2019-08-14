@@ -52,7 +52,7 @@ public class UserGUI extends JFrame {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public UserGUI(UserAgent userAgent) {
-		super("Agente Usuario");
+		super("Usuario: "+userAgent.getName());
 		
 		//Aspectos básicos de la ventana
 		this.setMinimumSize(new Dimension(250,250));

@@ -79,6 +79,9 @@ public class UserAgent extends Agent {
 								SendTrips st = (SendTrips) ce;
 								setTrips(st.getTrips());
 							}else if(ce instanceof ReserveCompleted) {
+								ReserveCompleted rc = (ReserveCompleted)ce;
+								setTrips(rc.getTrips());
+								userGUI.setAgent((UserAgent)myAgent);
 								JOptionPane.showMessageDialog(null, "Se reservo el cupo exitosamente.", "Reserva de cupo", JOptionPane.INFORMATION_MESSAGE);
 							}else if (ce instanceof TripFull) {
 								JOptionPane.showMessageDialog(null, "El viaje está lleno!", "¡Ups!", JOptionPane.ERROR_MESSAGE);

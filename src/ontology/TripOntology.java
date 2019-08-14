@@ -11,12 +11,12 @@ import jade.core.CaseInsensitiveString;
  * @author ontology bean generator
  * @version 2019/08/14, 18:52:46
  */
-public class TripOntologyOntology extends jade.content.onto.Ontology  {
+public class TripOntology extends jade.content.onto.Ontology  {
   //NAME
   public static final String ONTOLOGY_NAME = "TripOntology";
   // The singleton instance of this ontology
   private static ReflectiveIntrospector introspect = new ReflectiveIntrospector();
-  private static Ontology theInstance = new TripOntologyOntology();
+  private static Ontology theInstance = new TripOntology();
   public static Ontology getInstance() {
      return theInstance;
   }
@@ -46,7 +46,7 @@ public class TripOntologyOntology extends jade.content.onto.Ontology  {
   /**
    * Constructor
   */
-  private TripOntologyOntology(){ 
+  private TripOntology(){ 
     super(ONTOLOGY_NAME, BasicOntology.getInstance());
     try { 
 

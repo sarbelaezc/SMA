@@ -17,7 +17,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 
-@SuppressWarnings({ "serial", "unused" })
+@SuppressWarnings({"serial"})
 public class RouterAgent extends Agent {
 	public Codec codec = new SLCodec();
 	public Ontology ontology = TripOntology.getInstance();
@@ -29,17 +29,13 @@ public class RouterAgent extends Agent {
 	}
 
 	public List assignRoute(List trips) {
-		int route = 1;
+		int route = (int) ((Math.random()*((2-1)+1))+1);
 		List ret = new ArrayList();
 		for(int i = 0; i<trips.size();i++) {
 			Trip trip = (Trip) trips.get(i);
 			trip.setRoute(route);
 			ret.add(trip);
-			if(route ==1) {
-				route =2;
-			}else {
-				route =1;
-			}
+			route = (int) ((Math.random()*(2-1)+1)+1);
 		}
 		return ret;
 	}
