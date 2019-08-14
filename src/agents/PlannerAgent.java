@@ -20,6 +20,10 @@ public class PlannerAgent extends Agent {
 	private Codec codec = new SLCodec();
 	private Ontology ontology = TripOntology.getInstance();
 	private List trips = new ArrayList();
+	
+	public void setTrips(List trips) {
+		this.trips = trips;
+	}
 
 	public PlannerAgent() {
 		super();
@@ -29,14 +33,12 @@ public class PlannerAgent extends Agent {
 		trips.add(trip1);
 		trips.add(trip2);
 		trips.add(trip3);
-		askRoute();
 	}
 
 	protected void setup() {
 		getContentManager().registerLanguage(codec);
 		getContentManager().registerOntology(ontology);
 		addBehaviour(new CyclicBehaviour(this) {
-
 			public void action() {
 				MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
 						MessageTemplate.MatchOntology(ontology.getName()));
@@ -66,6 +68,13 @@ public class PlannerAgent extends Agent {
 								Trip trip = reserve.getChoosedTrip();
 								bookSeat(trip,sender,seat);
 							}
+						}else if(msg.getPerformative()==ACLMessage.INFORM) {
+							ContentElement ce;
+							ce=getContentManager().extractContent(msg);
+							if(ce instanceof SendTrips) {
+								SendTrips st = (SendTrips) ce;
+								setTrips(st.getTrips());
+							}
 						}
 					}
 				} catch (CodecException | OntologyException e) {
@@ -73,6 +82,7 @@ public class PlannerAgent extends Agent {
 				}
 			}
 		});
+		askRoute();
 	}
 
 	@SuppressWarnings("unused")
@@ -119,9 +129,15 @@ public class PlannerAgent extends Agent {
 		RequestRoutes rr = new RequestRoutes();
 		rr.setTrips(trips);
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setLanguage(codec.getName());
+		msg.setOntology(ontology.getName());
 		msg.setSender(getAID());
 		msg.addReceiver(new AID("router", AID.ISLOCALNAME));
-		msg.setContent("Pedir ruta");
+		try {
+			getContentManager().fillContent(msg, rr);
+		} catch (CodecException | OntologyException e) {
+			System.out.println(e);
+		}
 		send(msg);
 	}
 }
