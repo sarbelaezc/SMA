@@ -9,6 +9,10 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.core.*;
 import jade.core.behaviours.*;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.util.leap.ArrayList;
@@ -20,7 +24,7 @@ public class PlannerAgent extends Agent {
 	private Codec codec = new SLCodec();
 	private Ontology ontology = TripOntology.getInstance();
 	private List trips = new ArrayList();
-	
+
 	public void setTrips(List trips) {
 		this.trips = trips;
 	}
@@ -62,16 +66,17 @@ public class PlannerAgent extends Agent {
 								msg2.addReceiver(sender);
 								getContentManager().fillContent(msg2, st);
 								send(msg2);
+
 							} else if (ce instanceof Reserve) {
 								Reserve reserve = (Reserve) ce;
 								Seat seat = reserve.getSeat();
 								Trip trip = reserve.getChoosedTrip();
-								bookSeat(trip,sender,seat);
+								bookSeat(trip, sender, seat);
 							}
-						}else if(msg.getPerformative()==ACLMessage.INFORM) {
+						} else if (msg.getPerformative() == ACLMessage.INFORM) {
 							ContentElement ce;
-							ce=getContentManager().extractContent(msg);
-							if(ce instanceof SendTrips) {
+							ce = getContentManager().extractContent(msg);
+							if (ce instanceof SendTrips) {
 								SendTrips st = (SendTrips) ce;
 								setTrips(st.getTrips());
 							}
@@ -89,13 +94,12 @@ public class PlannerAgent extends Agent {
 		int tripId = choosedTrip.getId();
 		for (int i = 0; i < trips.size(); i++) {
 			Trip trip = (Trip) trips.get(i);
-			if (trip.getId() == tripId ) {
-				if(trip.getCapacity()-1>=0) {
+			if (trip.getId() == tripId) {
+				if (trip.getCapacity() - 1 >= 0) {
 					trip.setCapacity(trip.getCapacity() - 1);
 					trip.addSeats(seat);
 					ReserveCompleted resComp = new ReserveCompleted();
 					resComp.setTrips(trips);
-					System.out.print(resComp.getTrips().toString());
 					ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 					msg.setLanguage(codec.getName());
 					msg.setOntology(ontology.getName());
@@ -103,13 +107,41 @@ public class PlannerAgent extends Agent {
 					msg.addReceiver(sender);
 					try {
 						getContentManager().fillContent(msg, resComp);
-					}catch (CodecException | OntologyException e) {
+					} catch (CodecException | OntologyException e) {
 						System.out.println(e);
 					}
 					send(msg);
+					SendTrips st = new SendTrips();
+					st.setTrips(trips);
+					msg = new ACLMessage(ACLMessage.INFORM);
+					msg.setLanguage(codec.getName());
+					msg.setOntology(ontology.getName());
+					msg.setSender(getAID());
+
+					// Buscar agentes
+					DFAgentDescription template = new DFAgentDescription();
+					ServiceDescription sd = new ServiceDescription();
+					sd.setType("User-Interface");
+					template.addServices(sd);
+					try {
+						DFAgentDescription[] result = DFService.search(this, template);
+						for (int j = 0; j < result.length; j++) {
+							if (result[j].getName() != sender) {
+								msg.addReceiver(result[i].getName());
+							}
+						}
+						try {
+							getContentManager().fillContent(msg, st);
+						} catch (CodecException | OntologyException e) {
+							System.out.println(e);
+						}
+						send(msg);
+					} catch (FIPAException fe) {
+						System.out.println(fe);
+					}
 					return true;
 				}
-			} 
+			}
 		}
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 		msg.setLanguage(codec.getName());

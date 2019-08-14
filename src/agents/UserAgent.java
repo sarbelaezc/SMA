@@ -8,6 +8,10 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.core.*;
 import jade.core.behaviours.*;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.util.leap.ArrayList;
@@ -28,6 +32,7 @@ public class UserAgent extends Agent {
 
 	protected void setup() {
 		
+		
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -35,6 +40,17 @@ public class UserAgent extends Agent {
 			e.printStackTrace();
 		}
 		
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("User-Interface");
+		sd.setName(getAID()+ "-User-Interface");
+		dfd.addServices(sd);
+		try {
+			DFService.register(this,dfd);
+		}catch(FIPAException fe) {
+			System.out.println(fe);
+		}
 		getContentManager().registerLanguage(codec);
 		getContentManager().registerOntology(ontology);
 
@@ -78,6 +94,7 @@ public class UserAgent extends Agent {
 							if (ce instanceof SendTrips) {
 								SendTrips st = (SendTrips) ce;
 								setTrips(st.getTrips());
+								userGUI.setAgent((UserAgent)myAgent);
 							}else if(ce instanceof ReserveCompleted) {
 								ReserveCompleted rc = (ReserveCompleted)ce;
 								setTrips(rc.getTrips());
