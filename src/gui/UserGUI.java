@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
+
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -50,6 +52,10 @@ public class UserGUI extends JFrame {
 		super("Agente Usuario");
 		
 		OyenteBoton oyente = new OyenteBoton(userAgent);
+		
+		//Aspectos básicos de la ventana
+		this.setMinimumSize(new Dimension(250,250));
+		//this.setLocationRelativeTo(null);
 		
 		// Barra de Menu
 		JMenuBar menuBar = new JMenuBar();
