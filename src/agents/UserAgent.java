@@ -10,6 +10,7 @@ import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.util.leap.ArrayList;
 import jade.util.leap.List;
 import ontology.*;
 import gui.UserGUI;
@@ -19,18 +20,19 @@ public class UserAgent extends Agent {
 
 	private Codec codec = new SLCodec();
 	private Ontology ontology = TripOntology.getInstance();
-	private List trips;
+	private List trips = new ArrayList();
 	UserGUI userGUI;
 	
 	protected void setup() {
 		getContentManager().registerLanguage(codec);
 		getContentManager().registerOntology(ontology);
-
+		
+		
 		userGUI = new UserGUI();
 		userGUI.setAgent(this);
 		userGUI.setVisible(true);
 		
-		// this.bookTrip();
+		this.requestTrips();
 
 		addBehaviour(new CyclicBehaviour(this) {
 			public void action() {
@@ -65,6 +67,7 @@ public class UserAgent extends Agent {
 	public void setTrips(List trips) {
 		this.trips = trips;
 	}
+	
 	public void bookTrip(Trip choosedTrip) {
 		System.out.println("Reservando viaje");
 		Reserve reserve = new Reserve();
@@ -79,6 +82,19 @@ public class UserAgent extends Agent {
 		msg.addReceiver(new AID("planner", AID.ISLOCALNAME));
 		try {
 			getContentManager().fillContent(msg, reserve);
+		} catch (CodecException | OntologyException e) {
+			System.out.println(e);
+		}
+		send(msg);
+	}
+	
+	public void requestTrips() {
+		RequestTrips rt = new RequestTrips();
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+		msg.setSender(getAID());
+		msg.addReceiver(new AID("planner", AID.ISLOCALNAME));
+		try {
+			getContentManager().fillContent(msg, rt);
 		} catch (CodecException | OntologyException e) {
 			System.out.println(e);
 		}

@@ -11,12 +11,9 @@ import jade.lang.acl.ACLMessage;
 @SuppressWarnings("serial")
 public class RouterAgent extends Agent {
 	public int id;
-	public ArrayList<Trip> routes;
-
+	
 	protected void setup() {
-		this.routes.add(new Trip());
 		addBehaviour(new ListeningBehaviour(this));
-
 	}
 
 	public void assignRoute() {

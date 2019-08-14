@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: Reserve
 * @author ontology bean generator
-* @version 2019/08/14, 03:15:02
+* @version 2019/08/14, 06:08:38
 */
 public class Reserve implements AgentAction {
 

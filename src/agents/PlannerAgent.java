@@ -1,74 +1,121 @@
 package agents;
-import java.util.ArrayList;
-import ontology.*;
 
+import ontology.*;
+import jade.content.ContentElement;
+import jade.content.lang.Codec;
+import jade.content.lang.Codec.CodecException;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
+import jade.content.onto.OntologyException;
 import jade.core.*;
 import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.util.leap.ArrayList;
+import jade.util.leap.List;
+
 @SuppressWarnings("serial")
 public class PlannerAgent extends Agent {
-	public ArrayList<Trip> routes;
+
+	private Codec codec = new SLCodec();
+	private Ontology ontology = TripOntology.getInstance();
+	private List trips = new ArrayList();
+
+	public PlannerAgent() {
+		super();
+	}
+
 	protected void setup() {
-		askRoute();
+		getContentManager().registerLanguage(codec);
+		getContentManager().registerOntology(ontology);
 		addBehaviour(new CyclicBehaviour(this) {
-			
-			 public void action() {	
-			 	Trip trip1 = new Trip();
-				Trip trip2 = new Trip();
-				ArrayList<Trip> trips2 = new ArrayList<Trip>();
-				trips2.add(trip1);
-				trips2.add(trip2);
-				
-                ACLMessage msg = receive();
-                if (msg!=null) {
-                    System.out.println( " - " +
-                    					myAgent.getLocalName() + " <- " +
-                    					msg.getContent() + " from " + msg.getSender().getName());
-                    
-                    if(msg.getContent().equals("Reservar viaje")) {
-                    	bookSeat(1,trips2);	
-                    }
-                    
-                    if(msg.getSender().getLocalName().equals("router") ) {
-                    	setRoutes(1, trips2, msg.getContent());	
-                    }
-                    // block();
-                 }
-             }
-        });	
-    }
-	
+
+			public void action() {
+				MessageTemplate mt = MessageTemplate.and(MessageTemplate.MatchLanguage(codec.getName()),
+						MessageTemplate.MatchOntology(ontology.getName()));
+				ACLMessage msg = blockingReceive(mt);
+				try {
+					if (msg != null) {
+						System.out.println(" - " + myAgent.getLocalName() + " <- " + msg.getContent() + " from "
+								+ msg.getSender().getName());
+						if (msg.getPerformative() == ACLMessage.REQUEST) {
+							ContentElement ce;
+
+							ce = getContentManager().extractContent(msg);
+							AID sender = msg.getSender();
+							if (ce instanceof RequestTrips) {
+								SendTrips st = new SendTrips();
+								st.setTrips(trips);
+								ACLMessage msg2 = new ACLMessage(ACLMessage.INFORM);
+								msg2.setLanguage(codec.getName());
+								msg2.setOntology(ontology.getName());
+								msg2.setSender(getAID());
+								msg2.addReceiver(sender);
+								getContentManager().fillContent(msg2, st);
+								send(msg2);
+							} else if (ce instanceof Reserve) {
+								Reserve reserve = (Reserve) ce;
+								Seat seat = reserve.getSeat();
+								Trip trip = reserve.getChoosedTrip();
+								bookSeat(trip,sender,seat);
+							}
+						}
+					}
+				} catch (CodecException | OntologyException e) {
+					System.out.println(e);
+				}
+			}
+		});
+	}
+
 	@SuppressWarnings("unused")
-	public boolean bookSeat(int tripId, ArrayList<Trip> trips) {
-		for(int i = 0; i <= trips.size(); i++) {
-			Trip trip = trips.get(i);
-			if(trip.getId() == tripId && trip.getCapacity() -1 >= 0) {
+	public boolean bookSeat(Trip choosedTrip, AID sender, Seat seat) {
+		int tripId = choosedTrip.getId();
+		for (int i = 0; i <= trips.size(); i++) {
+			Trip trip = (Trip) trips.get(i);
+			if (trip.getId() == tripId && trip.getCapacity() - 1 >= 0) {
 				trip.setCapacity(trip.getCapacity() - 1);
-				ACLMessage msg = new ACLMessage( ACLMessage.INFORM );
-				msg.addReceiver( new AID( "user", AID.ISLOCALNAME ) );
-			    msg.setContent("Reserva completa" );
-			    send(msg);	
+				trip.addSeats(seat);
+				ReserveCompleted resComp = new ReserveCompleted();
+				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+				msg.setLanguage(codec.getName());
+				msg.setOntology(ontology.getName());
+				msg.setSender(getAID());
+				msg.addReceiver(sender);
+				try {
+					getContentManager().fillContent(msg, resComp);
+				}catch (CodecException | OntologyException e) {
+					System.out.println(e);
+				}
+				send(msg);
 				return true;
 			} else {
-				ACLMessage msg = new ACLMessage( ACLMessage.INFORM );
-				msg.addReceiver( new AID( "user", AID.ISLOCALNAME ) );
-			    msg.setContent("Viaje lleno" );
-			    send(msg);	
+				ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+				msg.setLanguage(codec.getName());
+				msg.setOntology(ontology.getName());
+				msg.setSender(getAID());
+				msg.addReceiver(sender);
+				TripFull tf = new TripFull();
+				try {
+					getContentManager().fillContent(msg, tf);
+				} catch (CodecException | OntologyException e) {
+					System.out.println(e);
+				}
+				send(msg);
 				return false;
 			}
 		}
 		return false;
 	}
-	
-	public void askRoute(){
-		ACLMessage msg = new ACLMessage( ACLMessage.INFORM );
-		msg.addReceiver( new AID( "router", AID.ISLOCALNAME ) );
-	    msg.setContent("Pedir ruta" );
-	    send(msg);	
+
+	public void askRoute() {
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		msg.addReceiver(new AID("router", AID.ISLOCALNAME));
+		msg.setContent("Pedir ruta");
+		send(msg);
 	}
-	
-	public ArrayList<Trip> setRoutes(int tripId, ArrayList<Trip> trips, String routeId) {
-		return trips;
+
+	public ArrayList setRoutes(int tripId, List trips2, String routeId) {
+		return (ArrayList) trips2;
 	}
 }
-
