@@ -9,7 +9,7 @@ import jade.core.CaseInsensitiveString;
 
 /** file: TripOntology.java
  * @author ontology bean generator
- * @version 2019/08/14, 07:16:34
+ * @version 2019/08/14, 07:26:48
  */
 public class TripOntology extends jade.content.onto.Ontology  {
   //NAME
@@ -23,6 +23,8 @@ public class TripOntology extends jade.content.onto.Ontology  {
 
 
    // VOCABULARY
+    public static final String REQUESTROUTES_TRIPS="trips";
+    public static final String REQUESTROUTES="RequestRoutes";
     public static final String SENDTRIPS_TRIPS="trips";
     public static final String SENDTRIPS="SendTrips";
     public static final String REQUESTTRIPS="RequestTrips";
@@ -68,6 +70,8 @@ public class TripOntology extends jade.content.onto.Ontology  {
     add(requestTripsSchema, ontology.RequestTrips.class);
     PredicateSchema sendTripsSchema = new PredicateSchema(SENDTRIPS);
     add(sendTripsSchema, ontology.SendTrips.class);
+    PredicateSchema requestRoutesSchema = new PredicateSchema(REQUESTROUTES);
+    add(requestRoutesSchema, ontology.RequestRoutes.class);
 
 
     // adding fields
@@ -80,6 +84,7 @@ public class TripOntology extends jade.content.onto.Ontology  {
     reserveSchema.add(RESERVE_SEAT, seatSchema, ObjectSchema.MANDATORY);
     reserveSchema.add(RESERVE_CHOOSEDTRIP, tripSchema, ObjectSchema.MANDATORY);
     sendTripsSchema.add(SENDTRIPS_TRIPS, tripSchema, 1, ObjectSchema.UNLIMITED);
+    requestRoutesSchema.add(REQUESTROUTES_TRIPS, tripSchema, 1, ObjectSchema.UNLIMITED);
 
     // adding name mappings
 
