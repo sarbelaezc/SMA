@@ -11,6 +11,7 @@ import jade.core.CaseInsensitiveString;
  * @author ontology bean generator
  * @version 2019/08/14, 18:52:46
  */
+@SuppressWarnings({ "serial", "unused" })
 public class TripOntology extends jade.content.onto.Ontology  {
   //NAME
   public static final String ONTOLOGY_NAME = "TripOntology";

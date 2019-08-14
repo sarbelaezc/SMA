@@ -10,6 +10,7 @@ import jade.core.*;
 * @author ontology bean generator
 * @version 2019/08/14, 18:52:46
 */
+@SuppressWarnings({ "serial", "unused" })
 public class ReserveCompleted implements Predicate {
 
    /**
