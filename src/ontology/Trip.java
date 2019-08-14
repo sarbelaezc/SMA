@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: Trip
 * @author ontology bean generator
-* @version 2019/08/14, 01:17:04
+* @version 2019/08/14, 03:15:02
 */
 public class Trip implements Concept {
 
@@ -35,6 +35,17 @@ public class Trip implements Concept {
    }
 
    /**
+* Protege name: id
+   */
+   private int id;
+   public void setId(int value) { 
+    this.id=value;
+   }
+   public int getId() {
+     return this.id;
+   }
+
+   /**
 * Protege name: seats
    */
    private List seats = new ArrayList();
@@ -54,17 +65,6 @@ public class Trip implements Concept {
    public Iterator getAllSeats() {return seats.iterator(); }
    public List getSeats() {return seats; }
    public void setSeats(List l) {seats = l; }
-
-   /**
-* Protege name: id
-   */
-   private int id;
-   public void setId(int value) { 
-    this.id=value;
-   }
-   public int getId() {
-     return this.id;
-   }
 
    /**
 * Protege name: route

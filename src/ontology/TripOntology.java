@@ -9,7 +9,7 @@ import jade.core.CaseInsensitiveString;
 
 /** file: TripOntology.java
  * @author ontology bean generator
- * @version 2019/08/14, 01:17:04
+ * @version 2019/08/14, 03:15:02
  */
 public class TripOntology extends jade.content.onto.Ontology  {
   //NAME
@@ -25,12 +25,14 @@ public class TripOntology extends jade.content.onto.Ontology  {
    // VOCABULARY
     public static final String SENDTRIPS_TRIPS="trips";
     public static final String SENDTRIPS="SendTrips";
-    public static final String RESERVE_SEAT="seat";
     public static final String RESERVE_CHOOSEDTRIP="choosedTrip";
+    public static final String RESERVE_SEAT="seat";
     public static final String RESERVE="Reserve";
+    public static final String CREATE_TRIP="trip";
+    public static final String CREATE="Create";
     public static final String TRIP_ROUTE="route";
-    public static final String TRIP_ID="id";
     public static final String TRIP_SEATS="seats";
+    public static final String TRIP_ID="id";
     public static final String TRIP_CAPACITY="Capacity";
     public static final String TRIP_DEPARTURETIME="departureTime";
     public static final String TRIP="Trip";
@@ -51,6 +53,8 @@ public class TripOntology extends jade.content.onto.Ontology  {
     add(tripSchema, ontology.Trip.class);
 
     // adding AgentAction(s)
+    AgentActionSchema createSchema = new AgentActionSchema(CREATE);
+    add(createSchema, ontology.Create.class);
     AgentActionSchema reserveSchema = new AgentActionSchema(RESERVE);
     add(reserveSchema, ontology.Reserve.class);
 
@@ -65,11 +69,12 @@ public class TripOntology extends jade.content.onto.Ontology  {
     seatSchema.add(SEAT_OCUPANT, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     tripSchema.add(TRIP_DEPARTURETIME, (TermSchema)getSchema(BasicOntology.STRING), ObjectSchema.MANDATORY);
     tripSchema.add(TRIP_CAPACITY, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.MANDATORY);
-    tripSchema.add(TRIP_SEATS, seatSchema, 0, ObjectSchema.UNLIMITED);
     tripSchema.add(TRIP_ID, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.MANDATORY);
+    tripSchema.add(TRIP_SEATS, seatSchema, 0, ObjectSchema.UNLIMITED);
     tripSchema.add(TRIP_ROUTE, (TermSchema)getSchema(BasicOntology.INTEGER), ObjectSchema.MANDATORY);
-    reserveSchema.add(RESERVE_CHOOSEDTRIP, tripSchema, ObjectSchema.MANDATORY);
+    createSchema.add(CREATE_TRIP, tripSchema, ObjectSchema.MANDATORY);
     reserveSchema.add(RESERVE_SEAT, seatSchema, ObjectSchema.MANDATORY);
+    reserveSchema.add(RESERVE_CHOOSEDTRIP, tripSchema, ObjectSchema.MANDATORY);
     sendTripsSchema.add(SENDTRIPS_TRIPS, tripSchema, 1, ObjectSchema.UNLIMITED);
 
     // adding name mappings

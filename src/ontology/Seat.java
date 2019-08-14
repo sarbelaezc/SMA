@@ -8,7 +8,7 @@ import jade.core.*;
 /**
 * Protege name: Seat
 * @author ontology bean generator
-* @version 2019/08/14, 01:17:04
+* @version 2019/08/14, 03:15:02
 */
 public class Seat implements Concept {
 

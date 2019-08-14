@@ -65,10 +65,12 @@ public class UserAgent extends Agent {
 	public void setTrips(List trips) {
 		this.trips = trips;
 	}
-	public void bookTrip(Trip choosedTrip, Seat seat) {
+	public void bookTrip(Trip choosedTrip) {
 		System.out.println("Reservando viaje");
 		Reserve reserve = new Reserve();
 		reserve.setChoosedTrip(choosedTrip);
+		Seat seat = new Seat();
+		seat.setOcupant(getAID().getName());
 		reserve.setSeat(seat);
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.setLanguage(codec.getName());

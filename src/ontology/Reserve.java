@@ -8,20 +8,9 @@ import jade.core.*;
 /**
 * Protege name: Reserve
 * @author ontology bean generator
-* @version 2019/08/14, 01:17:04
+* @version 2019/08/14, 03:15:02
 */
 public class Reserve implements AgentAction {
-
-   /**
-* Protege name: choosedTrip
-   */
-   private Trip choosedTrip;
-   public void setChoosedTrip(Trip value) { 
-    this.choosedTrip=value;
-   }
-   public Trip getChoosedTrip() {
-     return this.choosedTrip;
-   }
 
    /**
 * Protege name: seat
@@ -32,6 +21,17 @@ public class Reserve implements AgentAction {
    }
    public Seat getSeat() {
      return this.seat;
+   }
+
+   /**
+* Protege name: choosedTrip
+   */
+   private Trip choosedTrip;
+   public void setChoosedTrip(Trip value) { 
+    this.choosedTrip=value;
+   }
+   public Trip getChoosedTrip() {
+     return this.choosedTrip;
    }
 
 }
