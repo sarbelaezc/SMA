@@ -9,7 +9,7 @@ import jade.core.CaseInsensitiveString;
 
 /** file: TripOntology.java
  * @author ontology bean generator
- * @version 2019/08/14, 06:08:38
+ * @version 2019/08/14, 07:16:34
  */
 public class TripOntology extends jade.content.onto.Ontology  {
   //NAME
@@ -54,12 +54,12 @@ public class TripOntology extends jade.content.onto.Ontology  {
     add(tripSchema, ontology.Trip.class);
 
     // adding AgentAction(s)
-    AgentActionSchema reserveSchema = new AgentActionSchema(RESERVE);
-    add(reserveSchema, ontology.Reserve.class);
 
     // adding AID(s)
 
     // adding Predicate(s)
+    PredicateSchema reserveSchema = new PredicateSchema(RESERVE);
+    add(reserveSchema, ontology.Reserve.class);
     PredicateSchema reserveCompletedSchema = new PredicateSchema(RESERVECOMPLETED);
     add(reserveCompletedSchema, ontology.ReserveCompleted.class);
     PredicateSchema tripFullSchema = new PredicateSchema(TRIPFULL);
